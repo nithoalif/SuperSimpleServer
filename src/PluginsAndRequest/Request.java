@@ -44,8 +44,9 @@ public class Request {
         state = enumState.processed;
         for(Object o : Server.plugins.GetProcessRequestList()){
             try {
-                Method m = o.getClass().getDeclaredMethod("procesx");
-                m.invoke(o);
+                Method m = o.getClass().getDeclaredMethod("process", Object.class); 
+                m.invoke(o, (Object)getMessage());
+                
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {
@@ -60,7 +61,7 @@ public class Request {
             
         }
         
-        return "<!doctype html><html>Hello World!</html>";
+        return "";
     }
 
     public enumState getState() {

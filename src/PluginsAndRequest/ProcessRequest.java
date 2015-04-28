@@ -15,5 +15,5 @@ import java.util.Map;
  * @author Satria
  */
 public interface ProcessRequest {
-    public void process(Object o);
+    public void process(Object o, Map m);
 }
