@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import static java.lang.System.out;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -67,12 +68,14 @@ public class PluginStaticFile implements ProcessRequest{
             }
         }
         //send HTTP headers
-        m.put("header", "HTTP/1.0 200 OK\n"
-                + "Server: RadioClub SuperSimpleServer\n"
-                + "Date: " + new Date() + "\n"
-                + "Content-type: text/html\n"
-                + "Content-length: " + file.length() + "\n"
-                + "Connection: close\n");
+        ArrayList<String> header = new ArrayList<>();
+        header.add("HTTP/1.1 200 OK");
+        header.add("Server: RadioClub SuperSimpleServer");
+        header.add("Date: " + new Date());
+        header.add("Content-type: text/html");
+        header.add("Content-length: " + file.length());
+        
+        m.put("head", header);
         m.put("body", fileData);
     }
 }

@@ -42,7 +42,7 @@ public class RequestProcessor extends Thread {
                         Request.enumState requestState = request.getState();
 
                         if (requestState == Request.enumState.enqueue) {
-                            String response = request.execute();
+                            byte[] response = request.execute();
                             request.getClientServer().sendMessage(response);
                             System.out.println("response of request #" + request.getSerial() + " sent");
                             i = i + 1;

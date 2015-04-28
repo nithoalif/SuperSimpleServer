@@ -67,10 +67,9 @@ public class ClientServer {
         Charset charset = Charset.forName("UTF-8");
         CharsetEncoder encoder = charset.newEncoder();
         
-        char[] buffer = new char[message.length >> 1];
+        char[] buffer = new char[message.length];
         for(int i = 0; i < buffer.length; i++) {
-            int bpos = i << 1;
-            char c = (char)(((message[bpos]&0x00FF)<<8) + (message[bpos+1]&0x00FF));
+            char c = (char)(message[i]&0x00FF);
             buffer[i] = c;
         }
 

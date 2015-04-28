@@ -3,6 +3,7 @@ package PluginsAndRequest;
 
 import ServerControl.ClientServer;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -58,7 +59,7 @@ public class Request {
         return client;
     }
     
-    public String execute(){
+    public byte[] execute(){
         state = enumState.processed;
         Map result = new HashMap();
         PluginLoader plugins = PluginLoader.getInstance();
@@ -82,8 +83,21 @@ public class Request {
         }
         
         
-        String body = new String((byte[])result.get("body"));
-        return result.get("header").toString() + "\n" + body + "\n";
+        String header = new String();
+        
+        ArrayList<String> headerList = (ArrayList)result.get("head");
+        headerList.add("Connection: close");
+        for(String headerItem : headerList){
+            header += headerItem + "\n";
+        }
+        header += "\n";
+        
+        byte[] head = header.getBytes();
+        byte[] body = (byte[])result.get("body");
+        byte[] response = new byte[head.length + body.length];
+        System.arraycopy(head, 0, response, 0, head.length);
+        System.arraycopy(body, 0, response, head.length, body.length);
+        return response;
     }
 
     public enumState getState() {
