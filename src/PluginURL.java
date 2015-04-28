@@ -22,7 +22,7 @@ import PluginsAndRequest.PreRequest;
 public class PluginURL implements PreRequest{
 
     @Override
-    public void preprocess(Object o) {
+    public void preprocess(Object o, Map m) {
         System.out.println("Not supported yet!");
     }   
 }

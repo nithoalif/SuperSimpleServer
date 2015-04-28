@@ -66,7 +66,6 @@ public class PluginStaticFile implements ProcessRequest{
                 Logger.getLogger(PluginStaticFile.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        String body = new String(fileData);
         //send HTTP headers
         m.put("header", "HTTP/1.0 200 OK\n"
                 + "Server: RadioClub SuperSimpleServer\n"
@@ -74,6 +73,6 @@ public class PluginStaticFile implements ProcessRequest{
                 + "Content-type: text/html\n"
                 + "Content-length: " + file.length() + "\n"
                 + "Connection: close\n");
-        m.put("body", body);
+        m.put("body", fileData);
     }
 }
