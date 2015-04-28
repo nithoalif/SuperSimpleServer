@@ -8,9 +8,14 @@
  */
 package PluginsAndRequest;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,91 +27,48 @@ import static org.junit.Assert.*;
  */
 public class PluginLoaderTest {
     
-    public PluginLoaderTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     
     @Before
-    public void setUp() {
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+
+    @After
+    public void cleanUpStreams() {
+        PrintStream ps =  new PrintStream(new FileOutputStream(FileDescriptor.out));
+        PrintStream es =  new PrintStream(new FileOutputStream(FileDescriptor.err));
+
+        System.setOut(ps);
+        System.setErr(es);
     }
     
-    @After
-    public void tearDown() {
+    private void assertEmptyOutput(){
+        String testOutput = outContent.toString();
+        Assert.assertEquals("", testOutput);
+        String testError = errContent.toString();
+        Assert.assertEquals("", testError);
     }
-
-    /**
-     * Test of GetPreRequestList method, of class PluginLoader.
-     */
-    @Test
-    public void testGetPreRequestList() {
-        System.out.println("GetPreRequestList");
-        PluginLoader instance = new PluginLoader();
-        ArrayList expResult = null;
-        ArrayList result = instance.GetPreRequestList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of GetProcessRequestList method, of class PluginLoader.
-     */
-    @Test
-    public void testGetProcessRequestList() {
-        System.out.println("GetProcessRequestList");
-        PluginLoader instance = new PluginLoader();
-        ArrayList expResult = null;
-        ArrayList result = instance.GetProcessRequestList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of GetPostRequestList method, of class PluginLoader.
-     */
-    @Test
-    public void testGetPostRequestList() {
-        System.out.println("GetPostRequestList");
-        PluginLoader instance = new PluginLoader();
-        ArrayList expResult = null;
-        ArrayList result = instance.GetPostRequestList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getInstance method, of class PluginLoader.
-     */
-    @Test
-    public void testGetInstance() {
-        System.out.println("getInstance");
-        PluginLoader expResult = null;
-        PluginLoader result = PluginLoader.getInstance();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
+    
     /**
      * Test of Load method, of class PluginLoader.
      */
     @Test
     public void testLoad() {
         System.out.println("Load");
-        String args = "";
-        PluginLoader instance = new PluginLoader();
+        String args = "C:\\Users\\Satria\\Documents\\NetBeansProjects\\ServerOOP\\src";
+        PluginLoader instance = PluginsAndRequest.PluginLoader.getInstance();
         instance.Load(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String expected1 = "plugin prerequest loaded : PluginURL";
+        String expected2 = "plugin postrequest loaded : PluginCompress";
+        String expected3 = "plugin request loaded : PluginStaticFile";
+        String SOutput = outContent.toString();
+        assertTrue( SOutput.contains(expected1)  );
+        assertTrue( SOutput.contains(expected2)  );
+        assertTrue( SOutput.contains(expected3)  );
+        // TODO review
     }
     
 }

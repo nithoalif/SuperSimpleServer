@@ -52,22 +52,22 @@ public class ServerTest {
 
     @Test
     public void atomRunTest(){
-        final AsynchronousServerSocketChannel socket = mock(AsynchronousServerSocketChannel.class);
+        final AsynchronousServerSocketChannel _socket = mock(AsynchronousServerSocketChannel.class);
         final AsynchronousSocketChannel client = mock(AsynchronousSocketChannel.class);
         final ByteBuffer buffer = mock(ByteBuffer.class);
 
-        when(socket.accept()).thenReturn(CompletableFuture.<AsynchronousSocketChannel>completedFuture(null));
+        when(_socket.accept()).thenReturn(CompletableFuture.<AsynchronousSocketChannel>completedFuture(null));
 
         Server atomObject = new Server() {
             @Override
             protected void listenSocket() {
-                server = socket;
+                socket = _socket;
             }
 
             protected void assignJob(Future<AsynchronousSocketChannel> assignedClient) {
                 try {
                     Assert.assertNull(assignedClient.get());
-                    cancelJobs();
+                    canceled = true;
                 }
                 catch (Exception thrownException) {
                     thrownException.printStackTrace();
