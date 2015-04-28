@@ -36,7 +36,6 @@ public class PluginCompress implements PostRequest{
             zipStream.close();
             byteStream.close();
             byte[] compressedData = byteStream.toByteArray();
-            //Base64.decodeBase64();
             
 //            Deflater deflater = new Deflater();  
 //            deflater.setInput(dataToCompress);  
