@@ -19,10 +19,16 @@ import java.util.Map;
  */
 
 import PluginsAndRequest.PreRequest;
+import PluginsAndRequest.Request;
 public class PluginURL implements PreRequest{
 
     @Override
     public void preprocess(Object o, Map m) {
-        System.out.println("Not supported yet!");
-    }   
+        Request request = (Request)o;
+        String requestedFile = request.getUrl();
+        if (requestedFile.equals("/")){
+            request.setUrl( "/index.html" );
+        }
+        //Bila bukan link kosong maka berikan pada PluginStaticFile
+    }
 }
