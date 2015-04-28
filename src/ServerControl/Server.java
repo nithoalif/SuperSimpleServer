@@ -20,9 +20,8 @@ public class Server {
     private int port = 8080;
     protected AsynchronousServerSocketChannel socket;
     protected Future<AsynchronousSocketChannel> futureClient;
-    protected ArrayList<ClientServer> connectedUser = new ArrayList <> ();
+    protected ArrayList<ClientServer> connectedUsers = new ArrayList <> ();
     protected ArrayList<RequestProcessor> threadPool = new ArrayList <> ();
-    public static PluginLoader plugins = new PluginLoader();
     
     private int requestNumber = 0;
     protected int pointer = 0;
@@ -56,7 +55,7 @@ public class Server {
     protected void acceptConnectedClient() throws InterruptedException {
         if (futureClient.isDone()) {
             try {
-                connectedUser.add(new ClientServer(futureClient.get()));
+                connectedUsers.add(new ClientServer(futureClient.get()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -65,13 +64,13 @@ public class Server {
     }
 
     protected void assignJobs() {
-        int i = 0, len = connectedUser.size();
+        int i = 0, len = connectedUsers.size();
 
         if (len > 0)
             System.out.println("client: " + len);
 
         while (i<len) {
-            ClientServer electron = connectedUser.get(i);
+            ClientServer electron = connectedUsers.get(i);
 
             if (electron != null) {
                 try {
@@ -83,7 +82,7 @@ public class Server {
                         Request request = new Request(electron, message, requestNumber);
                         thread.addRequest(request);
 
-                        connectedUser.remove(i);
+                        connectedUsers.remove(i);
                         len -= 1;
                         pointer = (pointer + 1) % threadPool.size();
                     }
@@ -100,6 +99,7 @@ public class Server {
         for (int i=0; i<5; i++) threadPool.get(i).start();
         
         // plugin listing
+        PluginLoader plugins = PluginsAndRequest.PluginLoader.getInstance();
         plugins.Load("/home/nithoalif/Dev/NetBeansProjects/SuperSimpleServer/src/");
         
         futureClient = socket.accept();

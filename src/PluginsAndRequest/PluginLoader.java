@@ -25,6 +25,7 @@ public class PluginLoader {
    private ArrayList<Object> PreRequestList = new ArrayList<>();
    private ArrayList<Object> ProcessRequestList = new ArrayList<>();
    private ArrayList<Object> PostRequestList = new ArrayList<>();
+   private static PluginLoader instance;
    
    public ArrayList GetPreRequestList(){
        return PreRequestList;
@@ -35,6 +36,14 @@ public class PluginLoader {
    public ArrayList GetPostRequestList(){
        return PostRequestList;
    }
+   
+   public static PluginLoader getInstance(){
+       if (instance == null){
+           instance = new PluginLoader();
+       }
+       return instance;
+   }
+   
    public void Load(String args)
       {
          try {

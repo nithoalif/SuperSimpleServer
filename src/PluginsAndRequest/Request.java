@@ -5,6 +5,7 @@ import ServerControl.ClientServer;
 import ServerControl.Server;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -15,7 +16,9 @@ import java.util.logging.Logger;
  */
 public class Request {
     private ClientServer client;
+    protected String message;
     protected String url;
+
     private enumState state;
     private int serial;
 
@@ -27,41 +30,44 @@ public class Request {
     public Request(ClientServer _client, String _message, int _serial) {
         System.out.println(_message);
         client = _client;
-        url = _message;
+        message = _message;
         state = enumState.enqueue;
         serial = _serial;
+        StringTokenizer parse = new StringTokenizer(message);
+        //parse out method
+        String method = parse.nextToken().toUpperCase();
+        //parse out file requested
+        url = parse.nextToken().toLowerCase();
     }
 
     public String getMessage() {
-        return url;
+        return message;
     }
 
+    public String getUrl() {
+        return url;
+    }
+    
     public ClientServer getClientServer() {
         return client;
     }
-
+    
     public String execute(){
         state = enumState.processed;
-        for(Object o : Server.plugins.GetProcessRequestList()){
+        Map result = new HashMap();
+        PluginLoader plugins = PluginLoader.getInstance();
+        for(Object o : plugins.GetProcessRequestList()){
             try {
-                Method m = o.getClass().getDeclaredMethod("process", Object.class); 
-                m.invoke(o, (Object)getMessage());
-                
-            } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SecurityException ex) {
-                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
+                System.out.println(o.getClass().getName());
+                Method m = o.getClass().getDeclaredMethod("process", Object.class, Map.class); 
+                m.invoke(o, (Object)this, result);
+            } catch (Exception ex) {
                 Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
         
-        return "";
+        return result.get("header").toString() + "\n" + result.get("body").toString() + "\n";
     }
 
     public enumState getState() {
