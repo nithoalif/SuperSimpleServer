@@ -2,6 +2,9 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * All code and works here are created by Satria Priambada and team
+ * You are free to use and distribute the code
+ * We do not take responsibilities for any damage caused by using this code
  */
 package PluginsAndRequest;
 
@@ -14,11 +17,11 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author nithoalif
+ * @author Satria
  */
-public class RequestTest {
+public class RequestPOSTTest {
     
-    public RequestTest() {
+    public RequestPOSTTest() {
     }
     
     @BeforeClass
@@ -37,19 +40,10 @@ public class RequestTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of execute method, of class Request.
-     */
     @Test
-    public void testExecute() {
-        //ClientServer CS = new ClientServer();
-        System.out.println("execute");
-        Request instance = null;
-        String expResult = "";
-        String result = instance.execute();
-        assertEquals(expResult, result);
+    public void testSomeMethod() {
         // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+        fail("The test case is a prototype.");
     }
     
 }
