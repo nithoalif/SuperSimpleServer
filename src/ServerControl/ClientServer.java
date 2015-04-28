@@ -59,7 +59,22 @@ public class ClientServer {
         Charset charset = Charset.forName("UTF-8");
         CharsetEncoder encoder = charset.newEncoder();
 
-        writeBuffer =  encoder.encode(CharBuffer.wrap(message + '\0'));
+        writeBuffer =  encoder.encode(CharBuffer.wrap(message));
+        writeBufferStatus = client.write(writeBuffer);
+    }
+    
+    public void sendMessage(byte[] message) throws CharacterCodingException {
+        Charset charset = Charset.forName("UTF-8");
+        CharsetEncoder encoder = charset.newEncoder();
+        
+        char[] buffer = new char[message.length >> 1];
+        for(int i = 0; i < buffer.length; i++) {
+            int bpos = i << 1;
+            char c = (char)(((message[bpos]&0x00FF)<<8) + (message[bpos+1]&0x00FF));
+            buffer[i] = c;
+        }
+
+        writeBuffer =  encoder.encode(CharBuffer.wrap(buffer));
         writeBufferStatus = client.write(writeBuffer);
     }
 }
