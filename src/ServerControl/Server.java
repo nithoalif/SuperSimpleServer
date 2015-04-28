@@ -100,7 +100,7 @@ public class Server {
         
         // plugin listing
         PluginLoader plugins = PluginsAndRequest.PluginLoader.getInstance();
-        plugins.Load("/home/nithoalif/Dev/NetBeansProjects/SuperSimpleServer/src/");
+        plugins.Load("C:\\Users\\Satria\\Documents\\NetBeansProjects\\ServerOOP\\src");
         
         futureClient = socket.accept();
 
