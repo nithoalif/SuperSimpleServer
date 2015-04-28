@@ -26,7 +26,8 @@ public class PluginURL implements PreRequest{
     public void preprocess(Object o, Map m) {
         Request request = (Request)o;
         String requestedFile = request.getUrl();
-        if (requestedFile.equals("/")){
+        int panjangReqFile = requestedFile.length();
+        if (requestedFile.charAt( panjangReqFile - 1) ==  '/' ){
             request.setUrl( "/index.html" );
         }
         //Bila bukan link kosong maka berikan pada PluginStaticFile
