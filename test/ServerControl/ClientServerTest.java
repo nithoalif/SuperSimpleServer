@@ -1,3 +1,5 @@
+package ServerControl;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -13,7 +15,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by ibrohim on 14/04/15.
  */
-public class ElectronTest {
+public class ClientServerTest {
 
     @Test
     public void testReceiveMessage() throws Exception {
@@ -21,7 +23,7 @@ public class ElectronTest {
         final AsynchronousSocketChannel mockClient = mock(AsynchronousSocketChannel.class);
         when(mockClient.read(argument.capture())).thenReturn(CompletableFuture.<Integer>completedFuture(0));
 
-        Electron electronObject = new Electron(mockClient);
+        ClientServer electronObject = new ClientServer(mockClient);
         Assert.assertEquals(true, electronObject.isDead());
     }
 
@@ -30,13 +32,13 @@ public class ElectronTest {
         ArgumentCaptor<ByteBuffer> argument = ArgumentCaptor.forClass(ByteBuffer.class);
         final AsynchronousSocketChannel mockClient = mock(AsynchronousSocketChannel.class);
         when(mockClient.read(argument.capture())).then(new Answer() {
+            @Override
             public Object answer(InvocationOnMock invocation) {
                 argument.getValue().put(new byte[] {48,49,50});
                 return null;
             }
         }).thenReturn(CompletableFuture.<Integer>completedFuture(0));
-
-        Electron electronObject = new Electron(mockClient);
-        Assert.assertEquals("012", electronObject.getMessage().substring(0,3));
+        ClientServer electronObject = new ClientServer(mockClient);
+        Assert.assertEquals("012",electronObject.getMessage().substring(0, 3));
     }
 }
