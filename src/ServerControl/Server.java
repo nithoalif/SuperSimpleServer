@@ -3,13 +3,19 @@ package ServerControl;
 import PluginsAndRequest.PluginLoader;
 import PluginsAndRequest.Request;
 import PluginsAndRequest.RequestProcessor;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Properties;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by ibrohim on 14/04/15.
@@ -18,6 +24,9 @@ import java.util.concurrent.Future;
 public class Server {
     private String host = "0.0.0.0";
     private int port = 8080;
+    private String configFile = "sss.properties";
+    private String pluginsLocation = "src/";
+    
     protected AsynchronousServerSocketChannel socket;
     protected Future<AsynchronousSocketChannel> futureClient;
     protected ArrayList<ClientServer> connectedUsers = new ArrayList <> ();
@@ -27,6 +36,25 @@ public class Server {
     protected int pointer = 0;
 
     boolean canceled = false;
+    
+    public void loadConfig() {
+        Properties prop = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFile);
+        
+        if (inputStream != null) {
+            
+            try {
+                prop.load(inputStream);
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                
+                host = prop.getProperty("host");
+                port = Integer.valueOf(prop.getProperty("port"));
+                pluginsLocation = prop.getProperty("pluginslocation");
+            }
+        }
+    }
+    
     public void cancelJobs() {
         canceled = true;
         try {
@@ -44,12 +72,16 @@ public class Server {
             socket.bind(listenTo);
         }
         catch (Exception thrownException) {
+            System.out.println("Error at Server::listenSocket");
             System.out.println(thrownException.getMessage());
         }
     }
 
     public Server() {
         listenSocket();
+        loadConfig();
+        
+        System.out.println();
     }
 
     protected void acceptConnectedClient() throws InterruptedException {
@@ -97,10 +129,9 @@ public class Server {
         // setup threads
         for (int i=0; i<5; i++) threadPool.add(new RequestProcessor());
         for (int i=0; i<5; i++) threadPool.get(i).start();
-        
-        // plugin listing
+
         PluginLoader plugins = PluginsAndRequest.PluginLoader.getInstance();
-        plugins.Load("/home/nithoalif/Dev/NetBeansProjects/SuperSimpleServer/src/");
+        plugins.Load(pluginsLocation);
         
         futureClient = socket.accept();
 

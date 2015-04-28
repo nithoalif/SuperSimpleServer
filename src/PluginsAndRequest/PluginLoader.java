@@ -81,11 +81,13 @@ public class PluginLoader {
                  } catch (ClassNotFoundException e) {
                      // do nothing
                  } catch (Exception e){
+                     System.out.println("Error at PluginLoader::Load");
                      System.out.println(e.getMessage());
                  }
              }
          }
          catch (Throwable e ) {
+            System.out.println("Error at PluginLoader::Load");
             System.err.println(e);
          }
       }
