@@ -74,7 +74,8 @@ public class ClientServer {
             buffer[i] = c;
         }
 
-        writeBuffer =  encoder.encode(CharBuffer.wrap(buffer));
+        writeBuffer =  ByteBuffer.allocate(message.length);
+        writeBuffer.put(message);
         writeBufferStatus = client.write(writeBuffer);
     }
 }

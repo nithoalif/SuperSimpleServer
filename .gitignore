@@ -2,4 +2,4 @@
 /build/
 /dist/
 sss.properties
-/src/staticfile.properties
+src/staticfile.properties
