@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -31,6 +32,8 @@ public class Server {
     protected Future<AsynchronousSocketChannel> futureClient;
     protected ArrayList<ClientServer> connectedUsers = new ArrayList <> ();
     protected ArrayList<RequestProcessor> threadPool = new ArrayList <> ();
+    
+    protected final Integer syncObject = 0;
     
     private int requestNumber = 0;
     protected int pointer = 0;
@@ -84,46 +87,6 @@ public class Server {
         System.out.println();
     }
 
-    protected void acceptConnectedClient() throws InterruptedException {
-        if (futureClient.isDone()) {
-            try {
-                connectedUsers.add(new ClientServer(futureClient.get()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            futureClient = socket.accept();
-        }
-    }
-
-    protected void assignJobs() {
-        int i = 0, len = connectedUsers.size();
-
-        if (len > 0)
-            System.out.println("client: " + len);
-
-        while (i<len) {
-            ClientServer electron = connectedUsers.get(i);
-
-            if (electron != null) {
-                try {
-                    if (electron.isReadComplete()) {
-                        String message = electron.getMessage();
-
-                        System.out.println("request" + (++requestNumber) + " assigned to " + pointer);
-                        RequestProcessor thread = threadPool.get(pointer);
-                        Request request = new Request(electron, message, requestNumber);
-                        thread.addRequest(request);
-
-                        connectedUsers.remove(i);
-                        len -= 1;
-                        pointer = (pointer + 1) % threadPool.size();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 
     public void run(){
         // setup threads
@@ -132,14 +95,54 @@ public class Server {
 
         PluginLoader plugins = PluginsAndRequest.PluginLoader.getInstance();
         plugins.Load(pluginsLocation);
-
         
-        futureClient = socket.accept();
+        CompletionHandler<Integer, Object> handlerMessage =
+            new CompletionHandler<Integer, Object>() {
+            
+            @Override
+            public void completed(Integer result, Object attachment) {
+                ClientServer client = (ClientServer) attachment;
+                
+                System.out.println("request" + (++requestNumber) + " assigned to " + pointer);
+                RequestProcessor thread = threadPool.get(pointer);
+                Request request = new Request(client, client.getMessage(), requestNumber);
+                thread.addRequest(request);
+                
+                pointer = (pointer + 1) % threadPool.size();
+            }
+            
+            @Override
+            public void failed(Throwable e, Object attachment) {
+                e.printStackTrace();
+            }
+        };
+        
+        CompletionHandler<AsynchronousSocketChannel, Object> handlerClient =
+            new CompletionHandler<AsynchronousSocketChannel, Object>() {
+            
+            @Override
+            public void completed(AsynchronousSocketChannel result, Object attachment) {
+                synchronized (syncObject)
+                {
+                    connectedUsers.add(new ClientServer(result, handlerMessage));
+                    syncObject.notify();
+                }
+            }
+            
+            @Override
+            public void failed(Throwable e, Object attachment) {
+                e.printStackTrace();
+            }
+        };
 
         try {
-            while(!canceled) {
-                acceptConnectedClient();
-                assignJobs();
+            
+            synchronized (syncObject)
+            {
+                while(!canceled) {
+                    socket.accept("client", handlerClient);
+                    syncObject.wait();
+                }            
             }
 
             System.out.println("--");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -22,14 +23,14 @@ public class ClientServer {
     protected Future<Integer> readBufferStatus;
     protected Future<Integer> writeBufferStatus;
 
-    protected void receiveMessage() {
+    protected void receiveMessage(CompletionHandler<Integer, Object> handler) {
         readBuffer = ByteBuffer.allocate(1024);
-        readBufferStatus = client.read(readBuffer);
+        client.read(readBuffer, this , handler);
     }
 
-    public ClientServer(AsynchronousSocketChannel _client){
+    public ClientServer(AsynchronousSocketChannel _client, CompletionHandler<Integer, Object> handler){
         client = _client;
-        receiveMessage();
+        receiveMessage(handler);
     }
 
     public void bury() throws IOException {
