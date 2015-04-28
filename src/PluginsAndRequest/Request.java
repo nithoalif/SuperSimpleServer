@@ -62,6 +62,17 @@ public class Request {
         state = enumState.processed;
         Map result = new HashMap();
         PluginLoader plugins = PluginLoader.getInstance();
+        //Menjalankan prerequest plugin
+        for(Object o : plugins.GetProcessRequestList()){
+            try {
+                System.out.println(o.getClass().getName());
+                Method m = o.getClass().getDeclaredMethod("preprocess", Object.class, Map.class); 
+                m.invoke(o, (Object)this, result);
+            } catch (Exception ex) {
+                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+            }    
+        }
+        //Menjalankan process request plugin
         for(Object o : plugins.GetProcessRequestList()){
             try {
                 System.out.println(o.getClass().getName());
@@ -71,6 +82,7 @@ public class Request {
                 Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
             }    
         }
+        //menjalankan post request plugin
         for(Object o : plugins.GetPostRequestList()){
             try {
                 System.out.println(o.getClass().getName());
