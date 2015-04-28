@@ -52,7 +52,7 @@ public class PluginCompress implements PostRequest{
             m.replace("body", compressedData);
             ArrayList<String> headerList = (ArrayList)m.get("head");
             //headerList.set(4, "Content-length: " + compressedData.length);
-            headerList.add("Content-Encoding: deflate");
+            headerList.add("Content-Encoding: gzip");
             
             
         } catch(Exception e){
