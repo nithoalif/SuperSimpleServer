@@ -3,12 +3,12 @@
 README - SuperSimpleServer v0.1
 ===============================
 <pre>
+===========================================
  -Bimo Aryo Tyasono (@squilliams)
  -Ibrohim Kholilul Islam (@ibrohimislam)
  -Nitho Alif Ibadurrahman (@NithoAlif)
  -Satria Priambada (@SatriaPriambada)
-
-===============================
+===========================================
 
 Specification:
 	1. Result is a Map :
