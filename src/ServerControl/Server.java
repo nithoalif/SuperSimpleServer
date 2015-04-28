@@ -132,6 +132,7 @@ public class Server {
 
         PluginLoader plugins = PluginsAndRequest.PluginLoader.getInstance();
         plugins.Load(pluginsLocation);
+
         
         futureClient = socket.accept();
 

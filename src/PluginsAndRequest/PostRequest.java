@@ -15,5 +15,5 @@ import java.util.Map;
  * @author Satria
  */
 public interface PostRequest {
-    public void postprocess(Object o);
+    public void postprocess(Object o, Map m);
 }

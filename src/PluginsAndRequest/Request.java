@@ -24,7 +24,7 @@ public class Request {
         enqueue,
         processed
     }
-
+    
     public Request(ClientServer _client, String _message, int _serial) {
         System.out.println(_message);
         client = _client;
@@ -37,7 +37,15 @@ public class Request {
         //parse out file requested
         url = parse.nextToken().toLowerCase();
     }
+    
+    public void setMessage(String _message) {
+        message = _message;
+    }
 
+    public void setUrl(String _url) {
+        url = _url;
+    }
+    
     public String getMessage() {
         return message;
     }
@@ -61,11 +69,21 @@ public class Request {
                 m.invoke(o, (Object)this, result);
             } catch (Exception ex) {
                 Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+            }    
+        }
+        for(Object o : plugins.GetPostRequestList()){
+            try {
+                System.out.println(o.getClass().getName());
+                Method m = o.getClass().getDeclaredMethod("postprocess", Object.class, Map.class); 
+                m.invoke(o, (Object)this, result);
+            } catch (Exception ex) {
+                Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+            }    
         }
         
-        return result.get("header").toString() + "\n" + result.get("body").toString() + "\n";
+        
+        String body = new String((byte[])result.get("body"));
+        return result.get("header").toString() + "\n" + body + "\n";
     }
 
     public enumState getState() {

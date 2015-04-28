@@ -10,6 +10,7 @@
 
 
 import PluginsAndRequest.*;
+import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 /**
@@ -23,8 +24,9 @@ import java.util.Map;
 public class PluginCompress implements PostRequest{
 
     @Override
-    public void postprocess(Object o) {
-        System.out.println("Not supported yet!");
+    public void postprocess(Object o, Map m) {
+        byte[] dataToCompress = (byte[])m.get("body");
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
     }
 
 }

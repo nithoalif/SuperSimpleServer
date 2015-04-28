@@ -15,5 +15,5 @@ import java.util.Map;
  * @author Satria
  */
 public interface PreRequest {
-    public void preprocess(Object o);
+    public void preprocess(Object o, Map m);
 }
