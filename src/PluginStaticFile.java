@@ -10,15 +10,18 @@
 
 
 import PluginsAndRequest.*;
+import ServerControl.Server;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +34,29 @@ import java.util.logging.Logger;
  * @author Satria Priambada
  * @version 0.1
  */
-public class PluginStaticFile implements ProcessRequest{
+public final class PluginStaticFile implements ProcessRequest{
+    private final String configFile = "staticfile.properties";
     private String DEFAULT_ROOT;
-    private String DEFAULT_FILE;
+    
+    public void loadConfig() {
+        Properties prop = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFile);
+        
+        if (inputStream != null) {
+            
+            try {
+                prop.load(inputStream);
+                
+                DEFAULT_ROOT = prop.getProperty("default_root");
+                
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
     public PluginStaticFile(){
-        DEFAULT_ROOT = "/home/nithoalif/Dev/NetBeansProjects/SuperSimpleServer/www/";
+        loadConfig();
     }
     
     @Override
