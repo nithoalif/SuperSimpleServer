@@ -1,7 +1,8 @@
+
 ===============================
 README - SuperSimpleServer v0.1
 ===============================
-
+<pre>
  -Bimo Aryo Tyasono (@squilliams)
  -Ibrohim Kholilul Islam (@ibrohimislam)
  -Nitho Alif Ibadurrahman (@NithoAlif)
@@ -26,3 +27,5 @@ Specification:
 		=> host = The IP address which the server can be accessed through
 		=> port = The port which used to communicate between client and the server 
 		=> pluginslocation = The location of the plugins used to extend the functionality of the server.
+
+</pre>
