@@ -63,7 +63,7 @@ public class Request {
         Map result = new HashMap();
         PluginLoader plugins = PluginLoader.getInstance();
         //Menjalankan prerequest plugin
-        for(Object o : plugins.GetProcessRequestList()){
+        for(Object o : plugins.GetPreRequestList()){
             try {
                 System.out.println(o.getClass().getName());
                 Method m = o.getClass().getDeclaredMethod("preprocess", Object.class, Map.class); 
