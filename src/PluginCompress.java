@@ -35,25 +35,11 @@ public class PluginCompress implements PostRequest{
             zipStream.flush();
             zipStream.close();
             byteStream.close();
-            byte[] compressedData = byteStream.toByteArray();
-            
-//            Deflater deflater = new Deflater();  
-//            deflater.setInput(dataToCompress);  
-//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(dataToCompress.length);   
-//            deflater.finish();  
-//            byte[] buffer = new byte[4096];   
-//            while (!deflater.finished()) {  
-//                int count = deflater.deflate(buffer); // returns the generated code... index  
-//                outputStream.write(buffer, 0, count);   
-//            }  
-//            outputStream.close();  
-//            byte[] compressedData = outputStream.toByteArray();  
+            byte[] compressedData = byteStream.toByteArray(); 
             m.replace("body", compressedData);
             ArrayList<String> headerList = (ArrayList)m.get("head");
-            //headerList.set(4, "Content-length: " + compressedData.length);
+            headerList.set(4, "Content-length: " + compressedData.length);
             headerList.add("Content-Encoding: gzip");
-            
-            
         } catch(Exception e){
             
         }
