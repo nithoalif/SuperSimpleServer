@@ -1,14 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- * All code and works here are created by Satria Priambada and team
- * You are free to use and distribute the code
- * We do not take responsibilities for any damage caused by using this code
- */
-
-
-
 import PluginsAndRequest.*;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -16,34 +5,37 @@ import java.util.Map;
 import java.util.zip.*;
 
 /**
- * Class 
+ * Class PluginCompress
  *
- * Kelas yang digunakan untuk 
+ * Kelas yang digunakan untuk memampatkan (compress) konten yang akan dikirim ke client
  *
- * @author Satria Priambada
- * @version 0.1
  */
 public class PluginCompress implements PostRequest{
 
     @Override
     public void postprocess(Object o, Map m) {
         try{
+            /* Original data */
             byte[] dataToCompress = (byte[])m.get("body");
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream(dataToCompress.length);
+            
+            /* Compress original data using GZip (Java API) */
             GZIPOutputStream zipStream = new GZIPOutputStream(byteStream);
             zipStream.write(dataToCompress);
             zipStream.flush();
             zipStream.close();
             byteStream.close();
+            
+            /* Resulted compressed Data */
             byte[] compressedData = byteStream.toByteArray(); 
             m.replace("body", compressedData);
+            
+            /* Add compression type to the Response Header */
             ArrayList<String> headerList = (ArrayList)m.get("head");
             headerList.set(4, "Content-length: " + compressedData.length);
             headerList.add("Content-Encoding: gzip");
-            
-            
         } catch(Exception e){
-            
+            e.printStackTrace();
         }
         
     }

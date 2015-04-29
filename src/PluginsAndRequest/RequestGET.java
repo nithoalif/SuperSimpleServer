@@ -9,38 +9,3 @@
 
 package PluginsAndRequest;
 
-/**
- * Class Romawi
- *
- * Kelas yang digunakan untuk merepresentasikan bilangan romawi
- *
- * @class Romawi Romawi.h "Romawi.h"
- * @package 
- * @brief 
- * @author Satria Priambada
- * @version 0.1
- * @date  
- * @warning -
- *
- */
-//public class RequestGET extends Request{
-//    private final String url;  
-//    /**
-//     *
-//     * @param s
-//     */
-////    public RequestGET(String s){
-////        url = s;
-////    }
-//
-//    /**
-//     *
-//     */
-//    @Override
-//    public String execute(){
-//        int panjang = url.length();
-//        for (int i = 0; i < panjang; ++i ){
-//            
-//        }
-//    }
-//}

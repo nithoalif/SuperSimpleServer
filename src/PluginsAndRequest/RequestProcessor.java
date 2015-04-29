@@ -10,13 +10,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by ibrohim on 26/04/15.
+ * Class RequestProcessor
+ *
+ * Kelas yang digunakan untuk mengatur alur pemrosesan request dengan thread
+ *
  */
 public class RequestProcessor extends Thread {
-
-    private Boolean state = false;
-
     private List <Request> listOfRequest = new ArrayList<>();
+    private Boolean state = false;
 
     public int getRequestCount(){
         return listOfRequest.size();
@@ -31,16 +32,12 @@ public class RequestProcessor extends Thread {
 
     @Override
     public void run(){
-
         synchronized(state) {
-
             while (true) {
                 int i = 0, size = listOfRequest.size();
-
                 while (i < size) {
 
                     Request request = listOfRequest.get(i);
-
                     try {
                         Request.enumState requestState = request.getState();
 
@@ -49,11 +46,12 @@ public class RequestProcessor extends Thread {
                             request.getClientServer().sendMessage(response);
                             //System.out.println("response of request #" + request.getSerial() + " sent");
                             i = i + 1;
+                        
                         } else if (requestState == Request.enumState.processed) {
                             if (request.getClientServer().isWriteComplete()) {
                                 try {
                                     request.getClientServer().bury();
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 listOfRequest.remove(i);
@@ -74,6 +72,5 @@ public class RequestProcessor extends Thread {
                 }
             }
         }
-
     }
 }
