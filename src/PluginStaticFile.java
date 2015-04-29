@@ -20,6 +20,8 @@ import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -36,6 +38,8 @@ import java.util.logging.Logger;
  */
 public final class PluginStaticFile implements ProcessRequest{
     private final String configFile = "staticfile.properties";
+    private final String mimeFile = "mimetype.properties";
+    private final Map mimeMap = new HashMap();
     private String DEFAULT_ROOT;
     
     public void loadConfig() {
@@ -43,10 +47,8 @@ public final class PluginStaticFile implements ProcessRequest{
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFile);
         
         if (inputStream != null) {
-            
             try {
                 prop.load(inputStream);
-                
                 DEFAULT_ROOT = prop.getProperty("default_root");
                 
             } catch (IOException ex) {
@@ -55,8 +57,24 @@ public final class PluginStaticFile implements ProcessRequest{
         }
     }
     
+    public void loadMIME(){
+        Properties mime = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(mimeFile);
+        if (inputStream != null) {
+            try {
+                mime.load(inputStream);
+                for (String name: mime.stringPropertyNames()){
+                    mimeMap.put(name, mime.getProperty(name));    
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public PluginStaticFile(){
         loadConfig();
+        loadMIME();
     }
     
     @Override
@@ -87,12 +105,14 @@ public final class PluginStaticFile implements ProcessRequest{
                 Logger.getLogger(PluginStaticFile.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         //send HTTP headers
+        String filetype = requestedFile.substring(requestedFile.lastIndexOf(".") + 1);
         ArrayList<String> header = new ArrayList<>();
         header.add("HTTP/1.1 200 OK");
         header.add("Server: RadioClub SuperSimpleServer");
         header.add("Date: " + new Date());
-        header.add("Content-type: text/html");
+        header.add("Content-type: " + mimeMap.get(filetype));
         header.add("Content-length: " + file.length());
         
         m.put("head", header);
