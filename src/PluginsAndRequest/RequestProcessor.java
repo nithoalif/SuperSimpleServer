@@ -1,10 +1,13 @@
 package PluginsAndRequest;
 
 import PluginsAndRequest.Request;
+import ServerControl.ClientServer;
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by ibrohim on 26/04/15.
@@ -44,7 +47,7 @@ public class RequestProcessor extends Thread {
                         if (requestState == Request.enumState.enqueue) {
                             byte[] response = request.execute();
                             request.getClientServer().sendMessage(response);
-                            System.out.println("response of request #" + request.getSerial() + " sent");
+                            //System.out.println("response of request #" + request.getSerial() + " sent");
                             i = i + 1;
                         } else if (requestState == Request.enumState.processed) {
                             if (request.getClientServer().isWriteComplete()) {
@@ -64,7 +67,7 @@ public class RequestProcessor extends Thread {
 
                 if (listOfRequest.size() == 0) try {
                     state.wait();
-                    System.out.println("notified");
+                    //System.out.println("notified");
                 } catch (InterruptedException e) {
                     System.out.println(e.getMessage());
                     return;

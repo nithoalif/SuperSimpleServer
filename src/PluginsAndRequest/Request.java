@@ -27,7 +27,6 @@ public class Request {
     }
     
     public Request(ClientServer _client, String _message, int _serial) {
-        System.out.println(_message);
         client = _client;
         message = _message;
         state = enumState.enqueue;
@@ -36,7 +35,14 @@ public class Request {
         //parse out method
         String method = parse.nextToken().toUpperCase();
         //parse out file requested
-        url = parse.nextToken().toLowerCase();
+        try {
+            url = parse.nextToken().toLowerCase();
+        } catch (Exception e) {
+            System.out.println("------");
+            System.out.println(_message);
+            e.printStackTrace();
+            System.out.println("------");
+        }
     }
     
     public void setMessage(String _message) {
@@ -66,7 +72,7 @@ public class Request {
         //Menjalankan prerequest plugin
         for(Object o : plugins.GetPreRequestList()){
             try {
-                System.out.println(o.getClass().getName());
+                //System.out.println(o.getClass().getName());
                 Method m = o.getClass().getDeclaredMethod("preprocess", Object.class, Map.class); 
                 m.invoke(o, (Object)this, result);
             } catch (Exception ex) {
@@ -76,7 +82,7 @@ public class Request {
         //Menjalankan process request plugin
         for(Object o : plugins.GetProcessRequestList()){
             try {
-                System.out.println(o.getClass().getName());
+                //System.out.println(o.getClass().getName());
                 Method m = o.getClass().getDeclaredMethod("process", Object.class, Map.class); 
                 m.invoke(o, (Object)this, result);
             } catch (Exception ex) {
@@ -86,7 +92,7 @@ public class Request {
         //menjalankan post request plugin
         for(Object o : plugins.GetPostRequestList()){
             try {
-                System.out.println(o.getClass().getName());
+                //System.out.println(o.getClass().getName());
                 Method m = o.getClass().getDeclaredMethod("postprocess", Object.class, Map.class); 
                 m.invoke(o, (Object)this, result);
             } catch (Exception ex) {

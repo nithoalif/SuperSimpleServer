@@ -37,14 +37,6 @@ public class ClientServer {
         client.close();
     }
 
-    public boolean isDead() throws ExecutionException, InterruptedException {
-        return readBufferStatus.get() == -1;
-    }
-
-    public boolean isReadComplete() throws ExecutionException, InterruptedException {
-        return (readBufferStatus.isDone());
-    }
-
     public boolean isWriteComplete() {
         return (writeBufferStatus!=null) && (writeBufferStatus.isDone());
     }

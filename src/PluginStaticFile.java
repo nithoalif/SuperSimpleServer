@@ -90,7 +90,7 @@ public final class PluginStaticFile implements ProcessRequest{
         //send HTTP headers
         ArrayList<String> header = new ArrayList<>();
         header.add("HTTP/1.1 200 OK");
-        header.add("Server: RadioClub SuperSimpleServer");
+        header.add("Server: SuperSimpleServer");
         header.add("Date: " + new Date());
         header.add("Content-type: text/html");
         header.add("Content-length: " + file.length());
