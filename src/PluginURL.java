@@ -18,7 +18,7 @@ public class PluginURL implements PreRequest{
         /* Modify the requested file if the url end with character '/' */
         int panjangReqFile = requestedFile.length();
         if (requestedFile.charAt( panjangReqFile - 1) == '/'){
-            request.setUrl( "/index.html" );
+            request.setUrl( request.getUrl() + "index.html" );
         }
     }
 }

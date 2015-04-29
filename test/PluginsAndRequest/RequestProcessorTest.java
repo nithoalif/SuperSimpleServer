@@ -1,8 +1,6 @@
 package PluginsAndRequest;
 
-import org.junit.Assert;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
@@ -21,6 +19,6 @@ public class RequestProcessorTest {
         requestProcessorObject.addRequest(mockRequest);
         int after = requestProcessorObject.getRequestCount();
 
-        Assert.assertEquals(before + 1, after);
+        assertEquals(before + 1, after);
     }
 }

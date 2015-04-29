@@ -1,15 +1,8 @@
 package PluginsAndRequest;
 
 import ServerControl.ClientServer;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Class Request
  * 
@@ -58,7 +51,7 @@ public abstract class Request {
         url = _url;
     }
     
-    protected void ConstructHeader(ArrayList _header){
+    public void ConstructHeader(ArrayList _header){
         /* Costruct Response Header */
         _header.add("HTTP/1.1 200 OK");
         _header.add("Server: RadioClub SuperSimpleServer");
