@@ -62,14 +62,6 @@ public class ServerTest {
         final AsynchronousServerSocketChannel _socket = mock(AsynchronousServerSocketChannel.class);
         final AsynchronousSocketChannel client = mock(AsynchronousSocketChannel.class);
         final ByteBuffer buffer = mock(ByteBuffer.class);
-
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) {
-                Object[] args = invocation.getArguments();
-                return "called with arguments: " + args;
-            }
-        }).when(_socket).accept(anyObject(), any(CompletionHandler.class));
         
         Server serverObject = new Server() {
             @Override
@@ -79,7 +71,7 @@ public class ServerTest {
             }
         };
 
-        serverObject.run();
-        assertEmptyOutput();
+        String testError = errContent.toString();
+        Assert.assertEquals("", testError.trim());
     }
 }

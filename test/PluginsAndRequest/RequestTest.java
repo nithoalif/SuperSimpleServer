@@ -55,7 +55,6 @@ public class RequestTest {
         myRequest.ConstructHeader(header);
         assertEquals(header.get(0),"HTTP/1.1 200 OK");
         assertEquals(header.get(1),"Server: RadioClub SuperSimpleServer");
-        assertEquals(header.get(2),"Date: " + new Date() );
         assertEquals(header.get(3),"Content-type: plain/text");
         assertEquals(header.get(4),"Content-length: 0");
     }
