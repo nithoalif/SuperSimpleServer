@@ -52,7 +52,7 @@ public abstract class Request {
         url = _url;
     }
     
-    protected void ConstructHeader(ArrayList _header){
+    public void ConstructHeader(ArrayList _header){
         /* Costruct Response Header */
         _header.add("HTTP/1.1 200 OK");
         _header.add("Server: RadioClub SuperSimpleServer");

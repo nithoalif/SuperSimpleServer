@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+/**
+ * Kelas yang bertugas menangani request dengan tipe GET
+ * @author Satria
+ */
 public class RequestGET extends Request {
     
     public RequestGET(ClientServer _client, String _message, int _serial) {
@@ -20,6 +24,7 @@ public class RequestGET extends Request {
         //parse out file requested
         try {
             url = parse.nextToken().toLowerCase();
+            System.out.println(url);
         } catch (Exception e) {
             System.out.println("------");
             System.out.println(_message);
@@ -34,8 +39,9 @@ public class RequestGET extends Request {
         Map result = new HashMap();
         
         result.put("head", new ArrayList<String>());
+
         ConstructHeader((ArrayList)result.get("head"));
-        
+        System.out.print(result.get("head"));
         PluginLoader plugins = PluginLoader.getInstance();
         /* Execute PreRequest Plugin */
         for (Object o : plugins.GetPreRequestList()){

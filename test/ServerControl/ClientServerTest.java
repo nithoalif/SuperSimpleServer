@@ -8,6 +8,7 @@ import org.mockito.stubbing.Answer;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 import java.util.concurrent.CompletableFuture;
 
 import static org.mockito.Mockito.*;
@@ -23,8 +24,21 @@ public class ClientServerTest {
         final AsynchronousSocketChannel mockClient = mock(AsynchronousSocketChannel.class);
         when(mockClient.read(argument.capture())).thenReturn(CompletableFuture.<Integer>completedFuture(0));
 
-        ClientServer electronObject = new ClientServer(mockClient);
-        Assert.assertEquals(true, electronObject.isDead());
+        CompletionHandler<Integer, Object> handlerClient =
+            new CompletionHandler<Integer, Object>() {
+            
+            @Override
+            public void completed(Integer result, Object attachment) {
+                // ok
+            }
+            
+            @Override
+            public void failed(Throwable e, Object attachment) {
+                assert(false);
+            }
+        };
+        
+        ClientServer electronObject = new ClientServer(mockClient, handlerClient);
     }
 
     @Test
@@ -38,7 +52,23 @@ public class ClientServerTest {
                 return null;
             }
         }).thenReturn(CompletableFuture.<Integer>completedFuture(0));
-        ClientServer electronObject = new ClientServer(mockClient);
-        Assert.assertEquals("012",electronObject.getMessage().substring(0, 3));
+        
+        CompletionHandler<Integer, Object> handlerClient =
+            new CompletionHandler<Integer, Object>() {
+            
+            @Override
+            public void completed(Integer result, Object attachment) {
+                ClientServer client = (ClientServer) attachment;
+                Assert.assertEquals("012",client.getMessage().substring(0, 3));
+            }
+            
+            @Override
+            public void failed(Throwable e, Object attachment) {
+                assert(false);
+            }
+        };
+        
+        ClientServer electronObject = new ClientServer(mockClient, handlerClient);
+        
     }
 }
