@@ -1,9 +1,6 @@
 package ServerControl;
 
-import PluginsAndRequest.PluginLoader;
-import PluginsAndRequest.Request;
-import PluginsAndRequest.RequestGET;
-import PluginsAndRequest.RequestProcessor;
+import PluginsAndRequest.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -11,9 +8,9 @@ import java.net.SocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,9 +104,18 @@ public class Server {
                 if (result.intValue() > 0) {
                     System.out.println("request" + (++requestNumber) + " assigned to " + pointer);
                     RequestProcessor thread = threadPool.get(pointer);
-                    Request request = new RequestGET(client, client.getMessage(), requestNumber);
-
-                    thread.addRequest(request);
+                    
+                    /* Parse out method */
+                    StringTokenizer parse = new StringTokenizer(client.getMessage());
+                    String method = parse.nextToken().toUpperCase();
+                    
+                    if (method.equalsIgnoreCase("POST")){
+                        Request request = new RequestPOST(client, client.getMessage(), requestNumber);
+                        thread.addRequest(request);
+                    } else{
+                        Request request = new RequestGET(client, client.getMessage(), requestNumber);
+                        thread.addRequest(request);
+                    }
                     pointer = (pointer + 1) % threadPool.size();
                 } else {
                     System.out.println("request" + (++requestNumber) + " have empty message ");

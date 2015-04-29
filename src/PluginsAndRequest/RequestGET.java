@@ -1,13 +1,5 @@
 package PluginsAndRequest;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- * All code and works here are created by Satria Priambada and team
- * You are free to use and distribute the code
- * We do not take responsibilities for any damage caused by using this code
- */
 import ServerControl.ClientServer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,7 +15,6 @@ public class RequestGET extends Request {
         state = enumState.enqueue;
         serial = _serial;
         StringTokenizer parse = new StringTokenizer(message);
-        
         //parse out method
         String method = parse.nextToken().toUpperCase();
         //parse out file requested

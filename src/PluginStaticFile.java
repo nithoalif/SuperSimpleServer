@@ -89,8 +89,14 @@ public final class PluginStaticFile implements ProcessRequest{
         ArrayList header = (ArrayList) m.get("head");
         
         String fileType = requestedFile.substring(requestedFile.lastIndexOf(".") + 1);
-        String contentType = mimeMap.get(fileType).toString();
+        String contentType = new String();
+        if (mimeMap.containsKey(fileType)){
+            contentType = mimeMap.get(fileType).toString();
+        } else{
+            contentType = "text/plain";
+        }
         
+            
         header.set(3, "Content-type: " + contentType);
         header.set(4, "Content-length: " + file.length());
         
