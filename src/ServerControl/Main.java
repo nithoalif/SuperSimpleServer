@@ -1,13 +1,13 @@
 package ServerControl;
 
 /**
- * Created by ibrohim on 14/04/15.
+ * Class Main
+ * 
+ * Kelas yang digunakan untuk menjalankan SuperSimpleServer
  */
 public class Main {
-
     public static void main(String [] args) {
-        Server atomObject = new Server();
-
-        atomObject.run();
+        Server SSS = new Server();
+        SSS.run();
     }
 }

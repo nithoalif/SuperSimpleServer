@@ -1,40 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- * All code and works here are created by Satria Priambada and team
- * You are free to use and distribute the code
- * We do not take responsibilities for any damage caused by using this code
- */
-
-
-
 import PluginsAndRequest.*;
-import ServerControl.Server;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import static java.lang.System.out;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Class 
+ * Class PluginStaticFile
  *
- * Kelas yang digunakan untuk 
+ * Kelas yang digunakan untuk memproses file statis yang diminta oleh request
  *
- * @author Satria Priambada
- * @version 0.1
  */
 public final class PluginStaticFile implements ProcessRequest{
     private final String configFile = "staticfile.properties";
@@ -42,80 +20,86 @@ public final class PluginStaticFile implements ProcessRequest{
     private final Map mimeMap = new HashMap();
     private String DEFAULT_ROOT;
     
+    public PluginStaticFile(){
+        loadConfig();
+        loadMIME();
+    }
+    
     public void loadConfig() {
+        /* Open the config file */
         Properties prop = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFile);
         
+        /* Set the default web directory  */
         if (inputStream != null) {
             try {
                 prop.load(inputStream);
                 DEFAULT_ROOT = prop.getProperty("default_root");
-                
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
     
     public void loadMIME(){
+        /* Open the suported MIME list file */
         Properties mime = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(mimeFile);
+        
+        /* Insert suported MIME type in the MIME map */
         if (inputStream != null) {
             try {
                 mime.load(inputStream);
                 for (String name: mime.stringPropertyNames()){
                     mimeMap.put(name, mime.getProperty(name));    
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-    }
-    
-    public PluginStaticFile(){
-        loadConfig();
-        loadMIME();
     }
     
     @Override
     public void process(Object o, Map m) {
+        /* Get the Request Header */
         Request request = (Request)o;
         String requestedFile = request.getUrl();
         
-        //create file object
+        /* Open the requested file */
         File file = new File(DEFAULT_ROOT, requestedFile);
-        //get length of file
         int fileLength = (int)file.length();
         FileInputStream fileIn = null;
         
-        //create byte array to store file data
+        /* Process the requested file into an array of byte  */
         byte[] fileData = new byte[fileLength];
-
         try {
-          //open input stream from file
-          fileIn = new FileInputStream(file);
-          //read file into byte array
-          fileIn.read(fileData);
-        } catch (IOException ex) {
-            Logger.getLogger(PluginStaticFile.class.getName()).log(Level.SEVERE, null, ex);
+            fileIn = new FileInputStream(file);
+            fileIn.read(fileData);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             try {
-                fileIn.close();//close file input stream
-            } catch (IOException ex) {
-                Logger.getLogger(PluginStaticFile.class.getName()).log(Level.SEVERE, null, ex);
+                fileIn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         
-        //send HTTP headers
-        String filetype = requestedFile.substring(requestedFile.lastIndexOf(".") + 1);
+        /* Construct HTTP Response */
         ArrayList<String> header = new ArrayList<>();
-        header.add("HTTP/1.1 200 OK");
-        header.add("Server: RadioClub SuperSimpleServer");
-        header.add("Date: " + new Date());
-        header.add("Content-type: " + mimeMap.get(filetype));
-        header.add("Content-length: " + file.length());
-        
+        ConstructHeader(requestedFile, (int)file.length(), header);
         m.put("head", header);
         m.put("body", fileData);
+    }
+    
+    public void ConstructHeader(String requestedFile, int contentLength, ArrayList _header){
+        /* Costruct Response Header */
+        String fileType = requestedFile.substring(requestedFile.lastIndexOf(".") + 1);
+        String contentType = mimeMap.get(fileType).toString();
+        _header.add("HTTP/1.1 200 OK");
+        _header.add("Server: RadioClub SuperSimpleServer");
+        _header.add("Date: " + new Date());
+        _header.add("Content-type: " + contentType);
+        _header.add("Content-length: " + contentLength);
     }
 }

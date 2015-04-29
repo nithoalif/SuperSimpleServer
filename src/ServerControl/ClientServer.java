@@ -16,17 +16,11 @@ import java.util.concurrent.Future;
  */
 
 public class ClientServer {
-
     protected AsynchronousSocketChannel client;
     protected ByteBuffer readBuffer;
     protected ByteBuffer writeBuffer;
     protected Future<Integer> readBufferStatus;
     protected Future<Integer> writeBufferStatus;
-
-    protected void receiveMessage(CompletionHandler<Integer, Object> handler) {
-        readBuffer = ByteBuffer.allocate(1024);
-        client.read(readBuffer, this , handler);
-    }
 
     public ClientServer(AsynchronousSocketChannel _client, CompletionHandler<Integer, Object> handler){
         client = _client;
@@ -56,16 +50,7 @@ public class ClientServer {
         return result;
     }
 
-    public void sendMessage(String message) throws CharacterCodingException {
-        Charset charset = Charset.forName("UTF-8");
-        CharsetEncoder encoder = charset.newEncoder();
-
-        writeBuffer =  encoder.encode(CharBuffer.wrap(message));
-        writeBufferStatus = client.write(writeBuffer);
-    }
-    
     public void sendMessage(byte[] message) throws CharacterCodingException {
-       
         char[] buffer = new char[message.length];
         for(int i = 0; i < buffer.length; i++) {
             char c = (char)(message[i]&0x00FF);
@@ -74,5 +59,10 @@ public class ClientServer {
 
         writeBuffer =  ByteBuffer.wrap(message);
         writeBufferStatus = client.write(writeBuffer);
+    }
+    
+    protected void receiveMessage(CompletionHandler<Integer, Object> handler) {
+        readBuffer = ByteBuffer.allocate(1024);
+        client.read(readBuffer, this , handler);
     }
 }
