@@ -9,7 +9,6 @@
 package PluginsAndRequest;
 
 import ServerControl.ClientServer;
-import java.nio.charset.Charset;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
