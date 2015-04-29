@@ -3,3 +3,4 @@
 /dist/
 sss.properties
 src/staticfile.properties
+/src/mimetype.properties
