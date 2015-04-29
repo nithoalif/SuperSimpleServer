@@ -86,20 +86,15 @@ public final class PluginStaticFile implements ProcessRequest{
         }
         
         /* Construct HTTP Response */
-        ArrayList<String> header = new ArrayList<>();
-        ConstructHeader(requestedFile, (int)file.length(), header);
-        m.put("head", header);
-        m.put("body", fileData);
-    }
-    
-    public void ConstructHeader(String requestedFile, int contentLength, ArrayList _header){
-        /* Costruct Response Header */
+        ArrayList header = (ArrayList) m.get("head");
+        
         String fileType = requestedFile.substring(requestedFile.lastIndexOf(".") + 1);
         String contentType = mimeMap.get(fileType).toString();
-        _header.add("HTTP/1.1 200 OK");
-        _header.add("Server: RadioClub SuperSimpleServer");
-        _header.add("Date: " + new Date());
-        _header.add("Content-type: " + contentType);
-        _header.add("Content-length: " + contentLength);
+        
+        header.set(3, "Content-type: " + contentType);
+        header.set(4, "Content-length: " + file.length());
+        
+        //m.put("head", header);
+        m.put("body", fileData);
     }
 }

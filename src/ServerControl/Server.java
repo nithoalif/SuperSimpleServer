@@ -2,6 +2,7 @@ package ServerControl;
 
 import PluginsAndRequest.PluginLoader;
 import PluginsAndRequest.Request;
+import PluginsAndRequest.RequestGET;
 import PluginsAndRequest.RequestProcessor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -106,9 +107,9 @@ public class Server {
                 ClientServer client = (ClientServer) attachment;
                 
                 if (result.intValue() > 0) {
-                    //System.out.println("request" + (++requestNumber) + " assigned to " + pointer);
+                    System.out.println("request" + (++requestNumber) + " assigned to " + pointer);
                     RequestProcessor thread = threadPool.get(pointer);
-                    Request request = new Request(client, client.getMessage(), requestNumber);
+                    Request request = new RequestGET(client, client.getMessage(), requestNumber);
 
                     thread.addRequest(request);
                     pointer = (pointer + 1) % threadPool.size();
