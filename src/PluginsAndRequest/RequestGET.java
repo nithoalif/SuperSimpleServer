@@ -24,7 +24,6 @@ public class RequestGET extends Request {
         //parse out file requested
         try {
             url = parse.nextToken().toLowerCase();
-            System.out.println(url);
         } catch (Exception e) {
             System.out.println("------");
             System.out.println(_message);
@@ -41,7 +40,6 @@ public class RequestGET extends Request {
         result.put("head", new ArrayList<String>());
 
         ConstructHeader((ArrayList)result.get("head"));
-        System.out.print(result.get("head"));
         PluginLoader plugins = PluginLoader.getInstance();
         /* Execute PreRequest Plugin */
         for (Object o : plugins.GetPreRequestList()){
