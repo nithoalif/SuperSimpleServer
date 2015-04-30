@@ -13,16 +13,24 @@ import java.util.logging.Logger;
  * Class RequestProcessor
  *
  * Kelas yang digunakan untuk mengatur alur pemrosesan request dengan thread
- *
+ * @author Ibrohim Kholilul Islam / 13513090
  */
 public class RequestProcessor extends Thread {
     private List <Request> listOfRequest = new ArrayList<>();
     private Boolean state = false;
 
+    /**
+     * Mengambil jumlah request
+     * @return jumlah request
+     */
     public int getRequestCount(){
         return listOfRequest.size();
     }
 
+    /**
+     * Menambahkan jumlah request
+     * @param request Request yang akan ditambah
+     */
     public void addRequest(Request request){
         synchronized(state) {
             listOfRequest.add(request);

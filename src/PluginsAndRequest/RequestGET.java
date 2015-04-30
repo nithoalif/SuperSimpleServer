@@ -9,10 +9,16 @@ import java.util.StringTokenizer;
 
 /**
  * Kelas yang bertugas menangani request dengan tipe GET
- * @author Satria
+ * @author Ibrohim Kholilul Islam / 13513090
  */
 public class RequestGET extends Request {
     
+    /**
+     * Konstruktor kelas Request Get
+     * @param _client client yang ditangani
+     * @param _message pesan dari client
+     * @param _serial urutan request
+     */
     public RequestGET(ClientServer _client, String _message, int _serial) {
         client = _client;
         message = _message;
@@ -32,7 +38,11 @@ public class RequestGET extends Request {
         }
     }
     
-    
+    /**
+     * Mengeksekusi request GET dan mengembalikan byte array untuk klien
+     * @return byte array untuk klien
+     */
+    @Override
     public byte[] execute() {
         state = enumState.processed;
         Map result = new HashMap();

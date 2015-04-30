@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**
- * Created by ibrohim on 26/04/15.
+ * Test untuk request processor
+ * @author Ibrohim Kholilul Islam / 13513090
  */
 public class RequestProcessorTest {
 

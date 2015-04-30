@@ -28,8 +28,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- *
- * @author Satria
+ * Test terhadap Plugin Compress
+ * @author Satria Priambada / 13513034
  */
 public class PluginCompressTest {
     private final String configFile = "staticfile.properties";

@@ -20,8 +20,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- *
- * @author Satria
+ * Test untuk Request POST
+ * @author Satria  Priambada /13513034
  */
 public class RequestPOSTTest {
     

@@ -23,8 +23,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- *
- * @author Satria
+ * Test untuk Plugin Static File
+ * @author Satria Priambada / 13513034
  */
 public class PluginStaticFileTest {
     

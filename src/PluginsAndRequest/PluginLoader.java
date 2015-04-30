@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * Class PluginLoader
  *
  * Kelas yang digunakan untuk melisting dan meload plugin 
- *
+ * @author Bimo Aryo Tyasono / 13513075
  */
 public class PluginLoader {
     private ArrayList<Object> PreRequestList = new ArrayList<>();
@@ -16,6 +16,10 @@ public class PluginLoader {
     private ArrayList<Object> PostRequestList = new ArrayList<>();
     private static PluginLoader instance;
 
+    /**
+     * Mengembalikan nilai instance dari plugin loader
+     * @return instance dari plugin loader
+     */
     public static PluginLoader getInstance(){
         if (instance == null){
             instance = new PluginLoader();
@@ -23,18 +27,34 @@ public class PluginLoader {
         return instance;
     }
     
+    /**
+     * Mengambil list yang berisi daftar plugin prerequest
+     * @return PreRequestList
+     */
     public ArrayList GetPreRequestList(){
         return PreRequestList;
     }
     
+    /**
+     * Mengambil list yang berisi daftar plugin processrequest
+     * @return ProcessRequestList
+     */
     public ArrayList GetProcessRequestList(){
         return ProcessRequestList;
     }
     
+    /**
+     * Mengambil list yang berisi daftar plugin postrequest
+     * @return PostRequestList
+     */
     public ArrayList GetPostRequestList(){
         return PostRequestList;
     }
 
+    /**
+     * Memuat plugin dari folder berisi plugin yang terdapat di args
+     * @param args Path ke folder berisi plugin
+     */
     public void Load(String args){
         try {
             /* Listing in the directory */

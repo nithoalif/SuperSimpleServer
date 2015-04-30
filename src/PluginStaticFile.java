@@ -11,7 +11,7 @@ import java.util.Properties;
  * Class PluginStaticFile
  *
  * Kelas yang digunakan untuk memproses file statis yang diminta oleh request
- *
+ * @author Nitho Alif Ibadurrahman / 13513072
  */
 public final class PluginStaticFile implements ProcessRequest{
     private final String configFile = "staticfile.properties";
@@ -19,11 +19,17 @@ public final class PluginStaticFile implements ProcessRequest{
     private final Map mimeMap = new HashMap();
     private String DEFAULT_ROOT;
     
+    /**
+     * Konstruktor yang membaca file konfigurasi dan memuat tipe MIME yang disupport
+     */
     public PluginStaticFile(){
         loadConfig();
         loadMIME();
     }
     
+    /**
+     * Melakukan pembacaan terhadap file konfigurasi
+     */
     public void loadConfig() {
         /* Open the config file */
         Properties prop = new Properties();
@@ -40,6 +46,9 @@ public final class PluginStaticFile implements ProcessRequest{
         }
     }
     
+    /**
+     * Melakukan pembacaan terhadap file MIME yang disupport
+     */
     public void loadMIME(){
         /* Open the suported MIME list file */
         Properties mime = new Properties();
@@ -58,6 +67,11 @@ public final class PluginStaticFile implements ProcessRequest{
         }
     }
     
+    /**
+     * Prosedur process yang membaca dan memproses file yang diminta oleh klien
+     * @param o Object request
+     * @param m Map yang berisi response ke client
+     */
     @Override
     public void process(Object o, Map m) {
         /* Get the Request Header */
@@ -95,11 +109,8 @@ public final class PluginStaticFile implements ProcessRequest{
             contentType = "text/plain";
         }
         
-            
         header.set(3, "Content-type: " + contentType);
         header.set(4, "Content-length: " + file.length());
-        
-        //m.put("head", header);
         m.put("body", fileData);
     }
 }

@@ -14,7 +14,8 @@ import java.util.concurrent.CompletableFuture;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by ibrohim on 14/04/15.
+ * Test untuk clientserver
+ * @author Ibrohim Kholilul Islam / 13513090
  */
 public class ClientServerTest {
 

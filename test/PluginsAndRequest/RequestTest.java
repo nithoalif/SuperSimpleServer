@@ -20,8 +20,8 @@ import static org.junit.Assert.*;
 import org.mockito.Mockito;
 
 /**
- *
- * @author Satria
+ * Test untuk kelas abstrak request
+ * @author Satria Priambada / 13513034
  */
 public class RequestTest {
     

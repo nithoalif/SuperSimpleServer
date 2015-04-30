@@ -16,7 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by ibrohim on 14/04/15.
+ * Class Server
+ * 
+ * Kelas yang digunakan untuk menjalankan SuperSimpleServer
+ * @author Ibrohim Kholilul Islam / 13513090
  */
 
 public class Server {
@@ -38,6 +41,9 @@ public class Server {
 
     boolean canceled = false;
     
+    /**
+     * Melakukan pembacaan terhadap file konfigurasi
+     */
     public void loadConfig() {
         Properties prop = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFile);
@@ -56,6 +62,9 @@ public class Server {
         }
     }
     
+    /**
+     * Prosedur yang melakukan pembatalan terhadap jobs
+     */
     public void cancelJobs() {
         canceled = true;
         try {
@@ -66,6 +75,9 @@ public class Server {
         }
     }
 
+    /**
+     * Prosedur yang membuka socket tertentu dan melakukan listen socket tersebut
+     */
     protected void listenSocket(){
         try {
             SocketAddress listenTo = new InetSocketAddress(host, port);
@@ -78,6 +90,9 @@ public class Server {
         }
     }
 
+    /**
+     * Konstruktor untuk server
+     */
     public Server() {
         listenSocket();
         loadConfig();

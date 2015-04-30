@@ -19,8 +19,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author Satria
+ * Test untuk plugin loader
+ * @author Satria Priambada /13513034
  */
 public class PluginLoaderTest {
     

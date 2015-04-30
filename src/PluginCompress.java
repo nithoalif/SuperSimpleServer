@@ -8,10 +8,15 @@ import java.util.zip.*;
  * Class PluginCompress
  *
  * Kelas yang digunakan untuk memampatkan (compress) konten yang akan dikirim ke client
- *
+ * @author Nitho Alif Ibadurrahman / 13513072
  */
 public class PluginCompress implements PostRequest{
 
+    /**
+     * Prosedur postprocess yang digunakan untuk memampatkan (compress) konten yang akan dikirim ke client
+     * @param o Object request
+     * @param m Map yang berisi response ke client
+     */
     @Override
     public void postprocess(Object o, Map m) {
         try{

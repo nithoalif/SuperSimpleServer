@@ -10,20 +10,36 @@ import java.util.StringTokenizer;
 /**
  * Class RequestPost
  *
- * 
- *
+ * Kelas yang bertugas menangani request dengan tipe POST
+ * @author Nitho Alif Ibadurrahman / 13513072
  */
 public class RequestPOST extends Request {
     Map postData = new HashMap();
 
+    /**
+     * Mengambil data dari request POST
+     * @param key kunci yang digunakan untuk mengambil data
+     * @return string data
+     */
     public String getPostData(String key) {
         return (String)postData.get(key);
     }
     
+    /**
+     * Melakukan pengisian data ke request POST
+     * @param key kunci yang ingin dimasukkan
+     * @param value data yang ingin dimasukkan
+     */
     public void setPostData(String key, String value){
         postData.put(key, value);
     }
     
+    /**
+     * Konstruktor untuk request POST
+     * @param _client client yang ditangani
+     * @param _message pesan dari client
+     * @param _serial urutan request
+     */
     public RequestPOST(ClientServer _client, String _message, int _serial) {
         client = _client;
         message = _message;
@@ -43,6 +59,10 @@ public class RequestPOST extends Request {
         }
     }
     
+    /**
+     * Mengeksekusi request POST dan mengembalikan byte array untuk klien
+     * @return byte array untuk klien
+     */
     @Override
     public byte[] execute() {
         /* Parse POST Data */
